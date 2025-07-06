@@ -9,7 +9,7 @@ This project exists to provide a miminum configuration for a full Debian install
 git clone https://gitlab.com/victordejong/debian-preseed-generator
 cd debian-preseed-generator
 ```
-2. Fill the `vars` file with the correct variables
+2. (Optional) Fill the `vars` file with the correct variables. Defaults will be used otherwise.
 
 2. To render the preseed file and make it available over HTTP, run this command from this repository:
 
@@ -22,13 +22,38 @@ cd debian-preseed-generator
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 Or copy the generated `preseed.cfg` file to another location and run `python3 -m http.server` from there.
 
-3. Add the following to the `linux` GRUB entry BEFORE the dashes (`---`):
+3. Add the following to the Debian Installer `linux` GRUB entry BEFORE the dashes (`---`):
 ```text
 linux   [...] auto=true hostname=[HOSTNAME] domain=[EXAMPLE.COM] url=http://WEBHOST:PORT/preseed.cfg
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 The domain part is not necessary and may be left empty `domain=`.
 
+## Default values
+
+Currently, the following default values are active.
+```bash
+# Unset static network configuration enables DHCP in the preseed file
+DEBINSTALL_NET_IP=
+DEBINSTALL_NET_MASK=
+DEBINSTALL_NET_GW=
+DEBINSTALL_NET_NS=
+
+DEBINSTALL_MACHINE_HOSTNAME='debian'
+DEBINSTALL_DOMAIN='example.org'
+DEBINSTALL_EXTRA_PACKAGES='sudo htop build-essential'
+
+DEBINSTALL_BOOTDISK='/dev/sda'
+
+# Timezone and country are for the Netherlands
+DEBINSTALL_COUNTRY='nl'
+DEBINSTALL_TIMEZONE='Europe/Amsterdam'
+
+DEBINSTALL_FULL_USERNAME='Jan Modaal'
+# Both passwords are 'Welkom123!@#'
+DEBINSTALL_USER_PASS='$6$KGtfj9Pk5Bf0lXxe$UbreL0Kpk3XymAhXwhlIx0DhS9PqbQWtjcrAq8sTBUi/kf4nyl.WgRzEyaSd7HtSvdqHmXS5JZk0G.zvS1YeF0'
+DEBINSTALL_GRUB_PASS='grub.pbkdf2.sha512.10000.D653BB7638769417A9A6A35F5E6ACFEB1DDD6C28321581AB800A02278255AF36CEDDA55919D197992590127DEA20957A9A593E8615CDA1729EC30FB76FB85962.906A00F5C102E490C2D61570390F272E7B450466CE6C71D923C4792FD2CAE25D862E6A7915DD3F90669087CFFF2FC2E72BFF95257E7C741893D4D241F0002DB7'
+```
 ## Supported OS'
 
 This preseed works on the following OS':
