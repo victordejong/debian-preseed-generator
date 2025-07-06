@@ -1,0 +1,103 @@
+# Preseed file
+
+# Workaround for static networking
+d-i preseed/early_command string kill-all-dhcp;netcfg
+
+# LOCALE
+
+d-i debian-installer/language string en
+d-i debian-installer/country string {{ country | upper }}
+d-i debian-installer/locale string en_US.UTF-8
+d-i keyboard-configuration/xkb-keymap select us
+
+
+# NETWORK
+
+d-i netcfg/choose_interface select auto
+
+{% if ip != "" and mask != "" and gw != "" and ns != "" %}
+d-i netcfg/disable_autoconfig boolean true
+
+d-i netcfg/get_ipaddress string {{ ip }}
+d-i netcfg/get_netmask string {{ mask }}
+d-i netcfg/get_gateway string {{ gw }}
+d-i netcfg/get_nameservers string {{ ns }}
+d-i netcfg/confirm_static boolean true
+{% endif %}
+
+d-i netcfg/hostname string {{ hostname }}
+d-i netcfg/get_hostname string {{ hostname }}
+d-i netcfg/get_domain string {{ domain }}
+
+d-i hw-detect/load_firmware boolean true
+
+
+# USER
+
+d-i passwd/root-password-crypted password {{ user_pass }}
+
+d-i passwd/user-fullname string {{ username }}
+d-i passwd/username string {{ username.split(" ")[0] | lower }}
+d-i passwd/user-password-crypted password {{ user_pass }}
+
+
+# TIME
+
+d-i clock-setup/utc boolean true
+d-i time/zone string {{ timezone }}
+
+d-i clock-setup/ntp boolean true
+d-i clock-setup/ntp-server string ntp.pool.org
+
+
+# DISK
+
+d-i partman-auto/disk string {{ disk }}
+d-i partman-auto/method string lvm
+d-i partman-auto-lvm/guided_size string max
+
+d-i partman-lvm/device_remove_lvm boolean true
+d-i partman-md/device_remove_md boolean true
+d-i partman-lvm/confirm boolean true
+d-i partman-lvm/confirm_nooverwrite boolean true
+
+d-i partman-auto/choose_recipe select atomic
+
+d-i partman-partitioning/confirm_write_new_label boolean true
+d-i partman/choose_partition select finish
+d-i partman/confirm boolean true
+d-i partman/confirm_nooverwrite boolean true
+
+d-i partman-efi/non_efi_system boolean true
+d-i partman-partitioning/choose_label select gpt
+d-i partman-partitioning/default_label string gpt
+
+
+# APT
+
+d-i mirror/country string {{ country }}
+d-i mirror/http/hostname string deb.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/http/proxy string
+
+d-i apt-setup/cdrom/set-first boolean false
+d-i apt-setup/non-free-firmware boolean true
+d-i apt-setup/non-free boolean true
+d-i apt-setup/contrib boolean true
+d-i apt-setup/disable-cdrom-entries boolean true
+
+tasksel tasksel/first multiselect standard, ssh-server
+d-i pkgsel/upgrade select full-upgrade
+popularity-contest popularity-contest/participate boolean false
+
+d-i pkgsel/include string {{ extra_pkgs }}
+
+
+# BOOTLOADER
+d-i grub-installer/with_other_os boolean true
+d-i grub-installer/password-crypted password {{ grub_pass }}
+
+
+# FINISH
+
+d-i finish-install/reboot_in_progress note
