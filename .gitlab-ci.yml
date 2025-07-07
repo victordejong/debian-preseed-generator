@@ -1,0 +1,10 @@
+# GitLab CI file for ansible files
+---
+stages:
+  - lint
+
+shellcheck:
+  stage: lint
+  image: koalaman/shellcheck-alpine
+  script:
+    - shellcheck ./deploy.sh
