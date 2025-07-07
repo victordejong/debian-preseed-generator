@@ -2,6 +2,13 @@
 
 This project exists to provide a miminum configuration for a full Debian installation with sane defaults used where relevant.
 
+## Requirements
+
+- `python3`
+- `python3-venv`
+- `bash`
+- (Optional) `grub` toolset (for generating a grub password with `grub-mkpasswd-pbkdf2`)
+
 ## Howto
 
 1. Clone this project:
