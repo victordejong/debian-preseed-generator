@@ -1,4 +1,4 @@
-# GitLab CI file for ansible files
+# GitLab CI file shellcheck
 ---
 stages:
   - lint
