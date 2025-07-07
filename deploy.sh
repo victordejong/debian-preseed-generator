@@ -162,7 +162,7 @@ render_template() {
         -D grub_pass="${DEBINSTALL_GRUB_PASS}" \
         preseed.cfg.j2 > build/preseed.cfg
 
-    pretty_print "Build complete! Artifact may be found in ./build/"
+    pretty_print "Build complete! Template may be found in ./build/preseed.cfg"
 }
 
 main() {
