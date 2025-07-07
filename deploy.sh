@@ -69,8 +69,86 @@ python3 -m http.server -d build
 }
 
 generate_user_config() {
-    # TODO
-    true
+
+    pretty_print """
+    You will now be prompted for each configuration option. The default, which
+    will be shown for each entry can be used by leaving the input blank.
+    After the questionnaire the results will be written to ./vars
+    """
+    # Prompt the user for each generic variable, networking and password need
+    # to be handled separately
+    VAR_NAME_LIST=$(compgen -v | grep 'DEBINSTALL' | grep -vE '(NET)|(PASS)')
+    for var_name in ${VAR_NAME_LIST}; do
+        pretty_print "    Config option ${var_name} [Default=${!var_name}]"
+        read -p "    Value: " VAR_INPUT
+        if [ ! -z "${VAR_INPUT}" ]; then
+            export "${var_name}"="${VAR_INPUT}"
+        fi
+    done
+
+    # Prompt user for networking choice. This has to be done a little bit
+    # differently as there is no default value (the default is DHCP).
+    # If the user wants a static IP, we loop over al NET variables and
+    # handle them in a match-case structure.
+    pretty_print """
+    Config option static networking (y/n) [Default=n]
+    If yes, you will be prompted for networking details"""
+    read -p "    Value: " VAR_INPUT
+    if [ "${VAR_INPUT}" == 'y' ]; then
+        VAR_NAME_LIST=$(compgen -v | grep 'DEBINSTALL' | grep 'NET')
+        for var_name in ${VAR_NAME_LIST}; do
+            case "${var_name}" in
+                DEBINSTALL_NET_IP)
+                    pretty_print "    Config option ${var_name} (Example: 10.0.0.2)"
+                    read -p "    Value: " ${var_name}
+                    ;;
+                DEBINSTALL_NET_MASK)
+                    pretty_print "    Config option ${var_name} (Example: 255.255.255.0)"
+                    read -p "    Value: " ${var_name}
+                    ;;
+                DEBINSTALL_NET_GW|DEBINSTALL_NET_NS)
+                    pretty_print "    Config option ${var_name} (Example: 10.0.0.1)"
+                    read -p "    Value: " ${var_name}
+                    ;;
+            esac
+        done
+    fi
+
+    # Generate root, user and grub passwords from user input, if desired
+    # Do some while-do stuff to get a validated password input
+    pretty_print """
+    Config option setting custom passwords (y/n) [Default=n]
+    If choosing no (the default), the password will be 'Welkom123!@#'
+    If yes, you will be prompted for a password"""
+    read -p "    Value: " VAR_INPUT
+    if [ "${VAR_INPUT}" == 'y' ]; then
+        pretty_print """
+        Set the root, user and GRUB2 password. All 3 will be generated from the
+        same value.
+        If you require a different value for each, please use the answers file."""
+        PASS_SUCCES=false
+        while [ "${PASS_SUCCES}" = false ]; do
+            read -sp "        Password: " PASS_INPUT
+            echo
+            read -sp "        Confirm password: " CONFIRM_PASS_INPUT
+            echo
+            if [ "${PASS_INPUT}" == "${CONFIRM_PASS_INPUT}" ]; then
+                PASS_SUCCES=true
+            else
+                pretty_print "    Passwords provided do not match!"
+            fi
+        done
+
+        DEBINSTALL_USER_PASS="$(openssl passwd -6 ${PASS_INPUT})"
+        # Hacky workaround for getting a GRUB2 password, as the
+        # grub-mkpasswd-pbkdf2 is not really script friendly
+        DEBINSTALL_GRUB_PASS="$(echo -e "${PASS_INPUT}\n${PASS_INPUT}" | grub-mkpasswd-pbkdf2 | awk '/grub.pbkdf/{print$NF}')"
+
+    fi
+
+    # Write the questionnaire to an answers file for (optional) future use
+    declare | grep -E '^DEBINSTALL' > vars
+
 }
 
 render_template() {
@@ -96,8 +174,10 @@ main() {
     # Load from vars file if exists, overriding defaults, else interactively prompt user
     if [ -f ./vars ]; then
         # shellcheck disable=SC1091
+        pretty_print "Variable answers file './vars' found"
         source ./vars
     else
+        pretty_print "No answers file found, starting user questionnaire"
         generate_user_config
     fi
 
