@@ -63,8 +63,8 @@ pretty_print() {
 
 host_content() {
 
-pretty_print "Hosting content"
-python3 -m http.server -d build
+    pretty_print "Hosting content"
+    python3 -m http.server -d build
 
 }
 
