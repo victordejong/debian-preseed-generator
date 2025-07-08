@@ -33,6 +33,10 @@ For more options, see `./deploy help`
 ```text
 linux   [...] auto=true hostname=[HOSTNAME] domain=[EXAMPLE.COM] url=http://WEBHOST:PORT/preseed.cfg
 ```
+
+> [!WARNING]
+> When starting the installer, the preseed file is configured as such to overwrite all data on the target disk if there is any, without prompting the user!
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 The domain part is not necessary and may be left empty `domain=`.
 
