@@ -21,18 +21,15 @@ cd debian-preseed-generator
 ```
 2. (Optional) Create a `vars` file with the variables from the section [Default values](#default-values). Default values will automatically be used otherwise. If no `vars` file is present, the user will be presented a questionnaire, with the answers saved for possible future use.
 
-2. To render the preseed file and make it available over HTTP, run this command from this repository:
+3. To render the preseed file and make it available over HTTP, run this command from this repository:
 
 ```bash
 ./deploy.sh
-
-# Or, if you only want to render the template without hosting it
-./deploy.sh build
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-Or copy the generated `preseed.cfg` file to another location and run `python3 -m http.server` from there.
+For more options, see `./deploy help` 
 
-3. Add the following to the Debian Installer `linux` GRUB entry BEFORE the dashes (`---`):
+4. Add the following to the Debian Installer `linux` GRUB entry BEFORE the dashes (`---`):
 ```text
 linux   [...] auto=true hostname=[HOSTNAME] domain=[EXAMPLE.COM] url=http://WEBHOST:PORT/preseed.cfg
 ```

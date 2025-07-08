@@ -61,6 +61,18 @@ pretty_print() {
     echo -e "${LIGHT_YELLOW}${1}${NOCOL}"
 }
 
+help_message() {
+    echo """
+    Debian-Preseed-Generator: Generate a miminum configuration for a full Debian installation with sane defaults
+
+    Usage: ${0} [OPTIONS]
+
+    Options:
+    build                       Only generate configuration, do not start the Python HTTP server
+    help                        Show this message
+    """
+}
+
 host_content() {
 
     pretty_print "Hosting content"
@@ -166,6 +178,13 @@ render_template() {
 }
 
 main() {
+
+    # Show help message
+    if [ "${1}" == "help" ]; then
+        help_message
+        exit 0
+    fi
+
     ve python3 > /dev/null
 
     # Set all default variables
