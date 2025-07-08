@@ -19,7 +19,7 @@ The preseed installs to a singe disk with LVM and uses a simple static networkin
 git clone https://gitlab.com/victordejong/debian-preseed-generator
 cd debian-preseed-generator
 ```
-2. (Optional) Create a `vars` file with the variables from the section [Default values](#default-values). Default values will automatically be used otherwise. If no `vars` file is present, the user will be presented a questionnaire, with the answers saved for possible future use.
+2. (Optional) 2 files can be used to automatically provide answers for the template. `vars` can be used and is the file `deploy.sh` writes to to save answers you provided manually for future use. `vars.custom` fulfills the same function as `vars`, but takes precedence and will never be written to by the `deploy.sh` script. For any missing option the default value will be used, see [Default values](#default-values).
 
 3. To render the preseed file and make it available over HTTP, run this command from this repository:
 

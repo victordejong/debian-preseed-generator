@@ -2,3 +2,4 @@ preseed.cfg
 .venv/
 build/
 vars
+vars.custom

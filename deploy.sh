@@ -191,7 +191,11 @@ main() {
     debinstall_defaults
 
     # Load from vars file if exists, overriding defaults, else interactively prompt user
-    if [ -f ./vars ]; then
+    if [ -f ./vars.custom ]; then
+        pretty_print "User override variable answers file './vars.custom' found"
+        # shellcheck disable=SC1091
+        source ./vars.custom
+    elif [ -f ./vars ]; then
         pretty_print "Variable answers file './vars' found"
         # shellcheck disable=SC1091
         source ./vars
