@@ -85,6 +85,7 @@ The `DEBINSTALL_GRUB_PASS` can be generated using the `grub-mkpasswd-pbkdf2` too
 
 This preseed has been tested on the following OS':
 
+ - Debian 11 Bullseye
  - Debian 12 Bookworm
  - Debian 13 Trixie RC2
 
