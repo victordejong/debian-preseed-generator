@@ -7,14 +7,12 @@ stages:
 shellcheck:
   stage: lint
   image: koalaman/shellcheck-alpine
-  script:
-    - shellcheck ./deploy.sh
+  script: shellcheck ./deploy.sh
 
 .test:
   stage: test
   image: alpine
-  before_script:
-    - apk add python3 bash
+  before_script: apk add python3 bash
 
 gendefaults:
   extends: .test
