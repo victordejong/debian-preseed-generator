@@ -34,7 +34,7 @@ ve() {
 
     # If not already in virtualenv
     # $VIRTUAL_ENV is being set from $venv/bin/activate script
-	  if [ -z "${VIRTUAL_ENV}" ]; then
+	if [ -z "${VIRTUAL_ENV}" ]; then
         if [ ! -d "${venv}" ]; then
             echo "Creating and activating virtual environment ${venv}"
             ${py} -m venv "${venv}" --system-site-package
