@@ -11,7 +11,7 @@ debinstall_defaults() {
 
     DEBINSTALL_MACHINE_HOSTNAME='debian'
     DEBINSTALL_DOMAIN='example.org'
-    DEBINSTALL_EXTRA_PACKAGES='sudo htop build-essential'
+    DEBINSTALL_EXTRA_PACKAGES='sudo'
 
     DEBINSTALL_BOOTDISK='/dev/sda'
 
