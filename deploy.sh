@@ -69,6 +69,7 @@ help_message() {
 
     Options:
     build                       Only generate configuration, do not start the Python HTTP server
+    gendefaults                 Output the default configuration to ./vars and exit
     help                        Show this message
     """
 }
@@ -78,6 +79,10 @@ host_content() {
     pretty_print "Hosting content"
     python3 -m http.server -d build
 
+}
+
+generate_defaults() {
+    (set -o posix ; set) | grep 'DEBINSTALL' > ./vars
 }
 
 generate_user_config() {
@@ -189,6 +194,12 @@ main() {
 
     # Set all default variables
     debinstall_defaults
+
+    # Output defaults to vars file and exit
+    if [ "${1}" == "gendefaults" ]; then
+        generate_defaults
+        exit 0
+    fi
 
     # Load from vars file if exists, overriding defaults, else interactively prompt user
     if [ -f ./vars.custom ]; then
