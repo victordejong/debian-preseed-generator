@@ -2,9 +2,34 @@
 ---
 stages:
   - lint
+  - test
 
 shellcheck:
   stage: lint
   image: koalaman/shellcheck-alpine
   script:
     - shellcheck ./deploy.sh
+
+.test:
+  stage: test
+  image: alpine
+  before_script:
+    - apk add python3 bash
+
+gendefaults:
+  extends: .test
+  script: ./deploy.sh gendefaults
+  artifacts:
+    paths: [vars]
+
+build:
+  extends: .test
+  needs: [gendefaults]
+  script: ./deploy.sh build
+
+vars_custom:
+  extends: .test
+  needs: [gendefaults]
+  script:
+    - cp ./vars ./vars.custom
+    - ./deploy.sh build | grep "answers file './vars.custom' found"
