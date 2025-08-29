@@ -87,6 +87,6 @@ This preseed has been tested on the following OS':
 
  - Debian 11 Bullseye
  - Debian 12 Bookworm
- - Debian 13 Trixie RC2
+ - Debian 13 Trixie
 
 Other version might also work, but are not guaranteed.
