@@ -185,7 +185,7 @@ render_template() {
 main() {
 
     # Show help message
-    if [ "${1}" == "help" ]; then
+    if [[ "${1}" == "help" || "${1}" == "--help" || "${1}" == "-h" ]]; then
         help_message
         exit 0
     fi
