@@ -6,7 +6,7 @@ stages:
 
 shellcheck:
   stage: lint
-  image: koalaman/shellcheck-alpine
+  image: registry.gitlab.com/pipeline-components/shellcheck:latest
   script: shellcheck ./deploy.sh
 
 .test:
