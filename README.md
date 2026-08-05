@@ -27,11 +27,11 @@ cd debian-preseed-generator
 ./deploy.sh
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-For more options, see `./deploy help` 
+For more options, see `./deploy help`
 
 4. Add the following to the Debian Installer `linux` GRUB entry BEFORE the dashes (`---`):
 ```text
-linux   [...] auto=true hostname=[HOSTNAME] domain=[EXAMPLE.COM] url=http://WEBHOST:PORT/preseed.cfg
+linux   [...] auto=true hostname=[HOSTNAME] domain=[EXAMPLE.COM] url=http://WEBHOST:PORT/preseed.cfg netcfg/choose_interface=auto
 ```
 
 > [!WARNING]
